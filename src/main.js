@@ -1,10 +1,59 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import marked from 'marked'
+
+let Comment = React.createClass({
+  rawMarkup: function() {
+    let rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+    return { __html: rawMarkup };
+  },
+
+  render: function() {
+    return (
+      <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+        </h2>
+        <span dangerouslySetInnerHTML={this.rawMarkup()} />
+      </div>
+    );
+  }
+});
+
+var CommentList = React.createClass({
+  render: function() {
+    return (
+      <div className="commentList">
+        <Comment author="Pete Hunt">This is one comment</Comment>
+        <Comment author="Jordan Walke">This is *another* comment</Comment>
+      </div>
+    );
+  }
+});
+
+var CommentForm = React.createClass({
+  render: function() {
+    return (
+      <div className="commentForm">
+        Hello, world! I am a CommentForm.
+      </div>
+    );
+  }
+});
+
+var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList />
+        <CommentForm />
+      </div>
+    );
+  }
+});
 
 ReactDOM.render(
-  <div>
-    <h1>Hello, React!</h1>
-    <p>My own react practice!</p>
-  </div>,
-  document.getElementById('example')
+  <CommentBox />,
+  document.getElementById('content')
 );
